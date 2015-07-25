@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Ride From:</strong>
+  <%= @post.from %>
+</p>
+
+<p>
+  <strong>To:</strong>
+  <%= @post.to %>
+</p>
+
+<p>
+  <strong>Way:</strong>
+  <%= @post.way %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @post.price %>
+</p>
+
+<%= link_to 'Edit', edit_post_path(@post) %> |
+<%= link_to 'Back', posts_path %>
