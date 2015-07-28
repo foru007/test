@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   root 'home#index'
   #get 'home/index'
 
+  
   resources :posts
+  resources :charges
 
   devise_for :users, controllers: { registrations: "registrations" }
   # The priority is based upon order of creation: first created -> highest priority.
