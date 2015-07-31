@@ -12,6 +12,7 @@
     </tr>
   </thead>
 
+
   <tbody>
     <% @posts.each do |post| %>
       <tr>
@@ -19,7 +20,6 @@
         <td><%= post.to %></td>
         <td><%= post.way %></td>
         <td><%= post.price %></td>
-
         <td><%= time_ago_in_words(post.created_at) %> ago by <%= post.user.name %></td>
         
         <td><%= link_to 'Show', post %></td>
@@ -29,37 +29,17 @@
         <% end %>
         <% if can? :update, post %>
         <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <%else%>
+        <%elsif !post.sold%>
         <td>
-          <script src="https://checkout.stripe.com/checkout.js"></script>
-
-            <button id="customButton">Purchase</button>
-
-          <script>
-            var handler = StripeCheckout.configure({
-              key: 'pk_test_BWU2ohVZ6qx5xtEUjzPOPK4b',
-              image: '/img/documentation/checkout/marketplace.png',
-              token: function(token) {
-                // Use the token to create the charge with a server-side script.
-                // You can access the token ID with `token.id`
-              }
-            });
-
-            $('#customButton').on('click', function(e) {
-              // Open Checkout with further options
-              handler.open({
-                name: 'Faisal',
-                description: '2 widgets',
-                amount: <%= post.price %>
-              });
-              e.preventDefault();
-            });
-
-            // Close Checkout on page navigation
-            $(window).on('popstate', function() {
-              handler.close();
-            });
-          </script>
+          <%= form_tag charges_path do %>
+            <%= hidden_field_tag :id , post.id %>
+            <%= hidden_field_tag :amount , post.price %>
+            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+            data-description="Please buy to get the offer"
+            data-amount=<%=post.price%>>
+            </script>
+          <% end %>
         </td>
         <% end %>
       </tr>

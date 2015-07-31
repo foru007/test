@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20150722121347) do
     t.string   "to"
     t.integer  "way"
     t.string   "price"
+    t.boolean  "sold"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

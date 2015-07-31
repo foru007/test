@@ -6,6 +6,7 @@ class CreatePosts < ActiveRecord::Migration
       t.string :to
       t.integer :way
       t.string :price
+      t.boolean :sold
 
       t.timestamps
     end
