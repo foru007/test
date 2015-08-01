@@ -43,3 +43,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin]
 gem 'devise'
 gem 'cancan'
 gem 'stripe'
+gem 'gmaps4rails'

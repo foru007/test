@@ -20,5 +20,55 @@
   <%= @post.price %>
 </p>
 
+<div style='width: 70%; float:right; float:top;'>
+  <div id="map" style='width: 90%; height: 400px;'>
+  	<script>
+      var latitude = 40.7142700;  
+      var longitude = -74.0059700;
+      var markers = [];
+  		var handler = Gmaps.build('Google');
+      var geocoder = new google.maps.Geocoder();
+      handler.buildMap({ internal: {id: 'map'}, provider: {zoom: 13, center: new google.maps.LatLng(latitude, longitude)} }, function(){
+        var map = handler.getMap();
+        var address1= "<%= @post.from%>";
+        var address2= "<%= @post.to%>";
+        codeAddress(address1,map);
+        codeAddress(address2,map);
+       
+      });
+
+      function placeMarker(location, map) {
+        //console.log(location);
+        
+        var icon;
+        var id;
+        if(markers.length<1){ id="Start"; icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';}
+        else { id="Destination"; icon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';}
+        var marker = new google.maps.Marker({
+            position: location, 
+            draggable:false,
+            animation: google.maps.Animation.DROP,
+            map: map,
+            icon: icon,
+            title: id
+        });
+        markers.push(marker); 
+      }
+
+      function codeAddress(address, map) {
+	    geocoder.geocode( { 'address': address}, function(results, status) {
+	      if (status == google.maps.GeocoderStatus.OK) {
+	        map.setCenter(results[0].geometry.location);
+	        placeMarker(results[0].geometry.location, map);
+	      } else {
+	        alert("Geocode was not successful for the following reason: " + status);
+	      }
+	    });
+	  }
+
+  	</script>
+  </div>
+</div>
+
 <%= link_to 'Edit', edit_post_path(@post) %> |
 <%= link_to 'Back', posts_path %>

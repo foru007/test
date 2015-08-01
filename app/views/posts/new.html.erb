@@ -1,5 +1,75 @@
 <h1>New post</h1>
 
-<%= render 'form' %>
+<div style='width: 28%; float: left; margin-left:2%;'>
+  <%= render 'form'%>
+  <%= link_to 'Back', posts_path %>
+</div>
+<div style='width: 70%; float:right; float:top;'>
+  <div id="map" style='width: 90%; height: 400px;'>
+  	<script>
+      var latitude = 40.7142700;  
+      var longitude = -74.0059700;
+      var markers = [];
+  		var handler = Gmaps.build('Google');
+      var geocoder = new google.maps.Geocoder();
+      handler.buildMap({ internal: {id: 'map'}, provider: {zoom: 13, center: new google.maps.LatLng(latitude, longitude)} }, function(){
+        var map = handler.getMap();
+        
+        google.maps.event.addListener(map, 'click', function(evt){          
+          console.log(markers.length);
+          if(markers.length<2)
+            placeMarker(evt.latLng, map);
+        });
+      });
 
-<%= link_to 'Back', posts_path %>
+      function placeMarker(location, map) {
+        //console.log(location);
+        
+        var icon;
+        var id;
+        if(markers.length<1){ id="Start"; icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';}
+        else { id="Destination"; icon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';}
+        var marker = new google.maps.Marker({
+            position: location, 
+            draggable:true,
+            animation: google.maps.Animation.DROP,
+            map: map,
+            icon: icon,
+            title: id
+        });
+        markers.push(marker);        
+        getAddress(location, marker);
+        google.maps.event.addListener(marker, 'dragstart', function(evt){
+          //if(markers[0]==marker) console.log("first marker");
+          getAddress(evt.latLng, marker)
+        });
+      }
+
+      function getAddress(latlng, marker){
+        //console.log(location);
+        //var latlng = new google.maps.LatLng(location., latlngStr[1]);
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results[1]) {
+              if(markers[0]==marker){        
+                document.getElementById('post_from').value = results[1].formatted_address;      
+                console.log(results[1].formatted_address);
+              }else if(markers[1]==marker){
+                document.getElementById('post_to').value = results[1].formatted_address;
+              }
+              
+            } else {
+              console.log('No results found');
+            }
+          } else {
+            console.log('Geocoder failed due to: ' + status);
+          }
+        });
+      }
+
+  	</script>
+  </div>
+</div>
+
+
+
