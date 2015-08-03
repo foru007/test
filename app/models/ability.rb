@@ -14,6 +14,7 @@ class Ability
             post.user==user
         end
         can :create, Post
+        
     end
     # Define abilities for the passed in user here. For example:
     #

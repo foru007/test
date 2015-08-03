@@ -1,0 +1,7 @@
+<h1> this is test </h1>
+<%if @profile.present? %>
+	<%="You already have Profile"%>
+	<%= link_to 'Show', @profile %>
+<%else%>
+	<%= link_to 'New Profile', new_profile_path %>
+<%end%>

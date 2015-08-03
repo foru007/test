@@ -8,7 +8,8 @@ Rails.application.routes.draw do
     collection do
          get :new
      end
- end
+  end
+ resources :profiles
 
 
   devise_for :users, controllers: { registrations: "registrations" }
