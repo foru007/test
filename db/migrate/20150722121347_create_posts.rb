@@ -5,6 +5,7 @@ class CreatePosts < ActiveRecord::Migration
       t.string :from
       t.string :to
       t.integer :way
+      t.integer :seat
       t.string :price
       t.boolean :sold
 

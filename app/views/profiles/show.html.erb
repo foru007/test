@@ -1,5 +1,7 @@
 <h1>Show Profile</h1>
 
+
+<%if @profile.present?%>
 <div style='width: 50%; float:left; float:top;'>
 <ul class="list-group">
   <li class="list-group-item"><strong>Name 		 : </strong> <%=@profile.name%> </li>
@@ -10,3 +12,10 @@
   <li class="list-group-item"><strong>Email Address	 : </strong> <%=@profile.user.email%></li>
 </ul>
 </div>
+<div style='width: 30%; float:right; float:top;'>
+	
+	<img src=<%=@profile.photo.url%> alt="..." class="img-circle">
+</div>
+<%else%>
+<%= "Profile not found" %>
+<%end%>

@@ -1,7 +1,10 @@
-<h1> this is test </h1>
+<h1> Profile Page</h1>
 <%if @profile.present? %>
 	<%="You already have Profile"%>
-	<%= link_to 'Show', @profile %>
+	<%= link_to 'Show', profile_path(@profile.user.id) %>	
+	<%= link_to 'Edit', edit_profile_path(@profile.user.id)%>
 <%else%>
 	<%= link_to 'New Profile', new_profile_path %>
 <%end%>
+<br>
+<%= link_to 'Back', posts_path %>

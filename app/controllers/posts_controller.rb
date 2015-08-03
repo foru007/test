@@ -45,6 +45,6 @@ class PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:post).permit(:from, :to, :way, :price)
+      params.require(:post).permit(:from, :to, :way, :seat, :price)
     end
 end

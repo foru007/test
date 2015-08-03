@@ -11,23 +11,123 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :from %><br>
-    <%= f.text_field :from%>
-  </div>
-  <div class="field">
-    <%= f.label :to %><br>
-    <%= f.text_field :to %>
-  </div>
-  <div class="field">
-    <%= f.label :way %><br>
-    <%= f.text_field :way %>
-  </div>
-  <div class="field">
-    <%= f.label :price %><br>
-    <%= f.text_field :price %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  
+    <div class="form-group">
+      <label for="from" class="col-sm-2 control-label">Start</label>
+      <div class="col-sm-10">
+        <% name='rakib'%>
+        <input type="text" class="form-control" id="post_from" name="post[from]"  
+              placeholder="Select on Map, from where want to start"
+              value="<%=@post.from%>" >
+        
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="to" class="col-sm-2 control-label">Destination</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="post_to" name="post[to]" placeholder="Select your destination on Map" value="<%=@post.to%>">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="way" class="col-sm-2 control-label">Way</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" id="post_way" name="post[way]" placeholder="Type number of 2/1" value="<%=@post.way%>">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="number" class="col-sm-2 control-label">Seat</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="post_seat" name="post[seat]" placeholder="Type Number of seat available" value="<%=@post.seat%>">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="price" class="col-sm-2 control-label">Price</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" id="post_price" name="post[price]" placeholder="Type cost in cent" value="<%=@post.price%>">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">Complete Post</button>
+      </div>
+    </div>
+  
+  
 <% end %>
+<div style='width: 70%; float:right; float:top;'>
+  <div id="map" style='width: 90%; height: 400px;'>
+    <script>
+      var latitude = 40.7142700;  
+      var longitude = -74.0059700;
+      var markers = [];
+      var handler = Gmaps.build('Google');
+      var geocoder = new google.maps.Geocoder();
+      handler.buildMap({ internal: {id: 'map'}, provider: {zoom: 13, center: new google.maps.LatLng(latitude, longitude)} }, function(){
+        var map = handler.getMap();
+        var address1= "<%= @post.from%>";
+        var address2= "<%= @post.to%>";
+        codeAddress(address1,map);
+        codeAddress(address2,map);
+       
+      });
+
+      function placeMarker(location, map) {
+        //console.log(location);
+        
+        var icon;
+        var id;
+        if(markers.length<1){ id="Start"; icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';}
+        else { id="Destination"; icon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';}
+        var marker = new google.maps.Marker({
+            position: location, 
+            draggable:true,
+            animation: google.maps.Animation.DROP,
+            map: map,
+            icon: icon,
+            title: id
+        });
+        markers.push(marker); 
+        google.maps.event.addListener(marker, 'dragstart', function(evt){
+          //if(markers[0]==marker) console.log("first marker");
+          getAddress(evt.latLng, marker)
+        });
+      }
+
+       function getAddress(latlng, marker){
+        //console.log(location);
+        //var latlng = new google.maps.LatLng(location., latlngStr[1]);
+        geocoder.geocode({'location': latlng}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            if (results[1]) {
+              if(markers[0]==marker){        
+                document.getElementById('post_from').value = results[1].formatted_address;      
+                console.log(results[1].formatted_address);
+              }else if(markers[1]==marker){
+                document.getElementById('post_to').value = results[1].formatted_address;
+              }
+              
+            } else {
+              console.log('No results found');
+            }
+          } else {
+            console.log('Geocoder failed due to: ' + status);
+          }
+        });
+      }
+
+
+
+      function codeAddress(address, map) {
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          map.setCenter(results[0].geometry.location);
+          placeMarker(results[0].geometry.location, map);
+        } else {
+          alert("Geocode was not successful for the following reason: " + status);
+        }
+      });
+    }
+
+    </script>
+  </div>
+</div>

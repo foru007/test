@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150802164806) do
+ActiveRecord::Schema.define(version: 20150803144934) do
 
   create_table "posts", force: true do |t|
     t.integer  "user_id"
     t.string   "from"
     t.string   "to"
     t.integer  "way"
+    t.integer  "seat"
     t.string   "price"
     t.boolean  "sold"
     t.datetime "created_at"
@@ -25,13 +26,17 @@ ActiveRecord::Schema.define(version: 20150802164806) do
   end
 
   create_table "profiles", force: true do |t|
-    t.integer "user_id"
-    t.string  "name"
-    t.string  "cid"
-    t.date    "birthday"
-    t.string  "sex"
-    t.string  "tel"
-    t.string  "address"
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "cid"
+    t.date     "birthday"
+    t.string   "sex"
+    t.string   "tel"
+    t.string   "address"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
   end
 
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id"

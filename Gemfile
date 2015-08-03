@@ -44,3 +44,4 @@ gem 'devise'
 gem 'cancan'
 gem 'stripe'
 gem 'gmaps4rails'
+gem "paperclip"
